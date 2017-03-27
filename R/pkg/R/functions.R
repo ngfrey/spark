@@ -2455,7 +2455,12 @@ setMethod("date_format", signature(y = "Column", x = "character"),
 #' @examples
 #' \dontrun{
 #' schema <- structType(structField("name", "string"),
-#' select(df, from_json(df$value, schema, dateFormat = "dd/MM/yyyy"))
+#' jsonArr <- "[{\"name\":\"Bob\"}, {\"name\":\"Alice\"}]"
+#' df <- as.DataFrame(list(list("people" = jsonArr)))
+#' collect(select(df, alias(from_json(df$people, schema, asJsonArray = TRUE), "arrcol")))
+#'  # prints 
+#'       arrcol
+#' 1  Bob, Alice
 #'}
 #' @note from_json since 2.2.0
 setMethod("from_json", signature(x = "Column", schema = "structType"),
